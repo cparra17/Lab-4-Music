@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -15,18 +15,13 @@ namespace Music.Controllers
         private MusicContext db = new MusicContext();
 
         // GET: Albums
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
             var albums = db.Albums.Include(a => a.Artist).Include(a => a.Genre);
-            return View(albums.ToList());
-        }
-
-        public ActionResult ShowSomeAlbums(int id)
-        {
-            var albums = db.Albums
-                .Include(a => a.Artist)
-                .Include(a => a.Genre)
-                .Where(a => a.GenreID == id);
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                albums = albums.Where(s => s.Title.Contains(searchString)||s.Genre.Name.Contains(searchString)||s.Artist.Name.Contains(searchString));
+            }
             return View(albums.ToList());
         }
 
@@ -147,6 +142,15 @@ namespace Music.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        // GET: Albums/Like/5
+        public ActionResult Like(int? id)
+        {
+            Album album = db.Albums.Find(id);
+            album.Likes++;
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }

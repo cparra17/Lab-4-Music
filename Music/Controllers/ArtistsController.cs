@@ -32,6 +32,7 @@ namespace Music.Controllers
             {
                 return HttpNotFound();
             }
+
             return View(artist);
         }
 
@@ -53,7 +54,7 @@ namespace Music.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ArtistID,Name")] Artist artist)
+        public ActionResult Create([Bind(Include = "ArtistID,Name,Bio")] Artist artist)
         {
             if (db.Artists.Any(a => a.Name == artist.Name))
             {
@@ -92,7 +93,7 @@ namespace Music.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ArtistID,Name")] Artist artist)
+        public ActionResult Edit([Bind(Include = "ArtistID,Name,Bio")] Artist artist)
         {
             if (ModelState.IsValid)
             {
